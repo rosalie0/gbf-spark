@@ -14,31 +14,19 @@ import {
 } from "@chakra-ui/react";
 import Sorry from "./assets/Stamp17.png";
 import Hurray from "./assets/Stamp2.png";
+import { SparkCalculcatorForm, calculateNumberOfPulls } from "../util/";
 
-type SparkCalculcatorForm = {
-  cerulean: number;
-  crystals: number;
-  singleTickets: number;
-  tenTickets: number;
-};
 const intialState: SparkCalculcatorForm = {
   cerulean: 0,
   crystals: 0,
   singleTickets: 0,
   tenTickets: 0,
 };
-const calculateNumberOfPulls = (form: SparkCalculcatorForm) => {
-  const crystalsAsPulls = Math.floor(form.crystals / 300); // 300 crystals is equal to 1 pull
-  const tenTicketsAsPulls = form.tenTickets * 10; // 1 tenTicket is is equal to 10 pulls.
-  const numberOfPulls =
-    form.cerulean + form.singleTickets + crystalsAsPulls + tenTicketsAsPulls;
-  return numberOfPulls;
-};
 
 function App() {
-  // Use the useMediaQuery hook to detect the screen size
   const [isMobile] = useMediaQuery("(max-width: 767px)");
   const paddingXForm = isMobile ? "0" : "6rem";
+
   const [state, setState] = useState(intialState);
   const handleCerulean = (value: string) => {
     setState({ ...state, cerulean: Number(value) });
@@ -53,7 +41,6 @@ function App() {
     setState({ ...state, tenTickets: Number(value) });
   };
   const numberOfPulls = calculateNumberOfPulls(state);
-  console.log(numberOfPulls);
   const canSpark = numberOfPulls >= 300;
   const percentChance = ((numberOfPulls / 300) * 100).toFixed(2);
   const numberOfPullsLeftOver = numberOfPulls - 300;
