@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import { SparkCalculcatorForm, calculateNumberOfPulls } from "../util/";
 import {
   NumberInput,
   NumberInputField,
@@ -12,15 +13,14 @@ import {
   Box,
   Image,
 } from "@chakra-ui/react";
-import Sorry from "./assets/Stamp17.png";
-import Hurray from "./assets/Stamp2.png";
-import { SparkCalculcatorForm, calculateNumberOfPulls } from "../util/";
+
+import ResultBox from "./ResultBox";
 
 const intialState: SparkCalculcatorForm = {
-  cerulean: 0,
-  crystals: 0,
-  singleTickets: 0,
-  tenTickets: 0,
+  cerulean: undefined,
+  crystals: undefined,
+  singleTickets: undefined,
+  tenTickets: undefined,
 };
 
 function App() {
@@ -28,6 +28,21 @@ function App() {
   const paddingXForm = isMobile ? "0" : "6rem";
 
   const [state, setState] = useState(intialState);
+  const [isTouched, setIsTouched] = useState(false);
+  const [isFilledOut, setIsFilledOut] = useState(false);
+
+  useEffect(() => {
+    const formValues = Object.values(state);
+    setIsTouched(formValues.some((ele) => ele !== undefined));
+    // if any of its values are not undefined, its touched.
+  }, [state]);
+
+  useEffect(() => {
+    const formValues = Object.values(state);
+    setIsFilledOut(!formValues.some((ele) => ele === undefined));
+    // if any of its values are not undefined, its touched.
+  }, [state]);
+
   const handleCerulean = (value: string) => {
     setState({ ...state, cerulean: Number(value) });
   };
@@ -40,10 +55,23 @@ function App() {
   const handleTenTickets = (value: string) => {
     setState({ ...state, tenTickets: Number(value) });
   };
+
   const numberOfPulls = calculateNumberOfPulls(state);
+  console.log(numberOfPulls);
   const canSpark = numberOfPulls >= 300;
-  const percentChance = ((numberOfPulls / 300) * 100).toFixed(2);
-  const numberOfPullsLeftOver = numberOfPulls - 300;
+
+  const showWaiting = !isTouched;
+  const showSuccess = isTouched && canSpark;
+  const showFailure = isTouched && !canSpark;
+
+  let resultColor = "orange.300";
+  if (showSuccess) resultColor = "green.300";
+  if (showFailure) resultColor = "red.300";
+
+  // if (isFilledOut && canSpark) resultColor = "green.300";
+  // if (isFilledOut && !canSpark) resultColor = "red.300";
+  console.log(state);
+
   return (
     <div>
       <Container
@@ -68,8 +96,8 @@ function App() {
         >
           <div className="input-wrapper">
             <div>
-              <div className="input-label">Cerulean Sparks</div>
-              <div className="input-label">already obtained</div>
+              <div className="input-label">Times already</div>
+              <div className="input-label">pulled</div>
             </div>
             <NumberInput min={0} size="lg" maxW={32} onChange={handleCerulean}>
               <NumberInputField
@@ -133,28 +161,21 @@ function App() {
           </div>
         </Container>
         <Box
-          bg={canSpark ? "green.300" : "red.300"}
+          bg={resultColor}
+          width={"full"}
+          //minW="container.sm"
           color="whiteAlpha.900"
           rounded="lg"
           padding={isMobile ? "0" : "2rem"}
         >
-          {canSpark ? (
-            <div className="result-box">
-              <Image src={Hurray} />
-              <h2>You can spark!</h2>
-              <p>
-                And you'd still have {numberOfPullsLeftOver} pulls left over!
-              </p>
-            </div>
-          ) : (
-            <div className="result-box">
-              <Image src={Sorry} />
-              <h2>You can't spark...</h2>
-              <p>
-                You only have {numberOfPulls} pulls, which means you have a{" "}
-                {percentChance}% chance of pulling the character you want.
-              </p>
-            </div>
+          {showWaiting && (
+            <ResultBox resultType="Waiting" numberOfPulls={numberOfPulls} />
+          )}
+          {showSuccess && (
+            <ResultBox resultType="Success" numberOfPulls={numberOfPulls} />
+          )}
+          {showFailure && (
+            <ResultBox resultType="Failure" numberOfPulls={numberOfPulls} />
           )}
         </Box>
       </Container>

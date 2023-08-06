@@ -3,7 +3,8 @@
   padding: 2rem;
   text-align: center;
   background-image: url("/artbook.webp");
-  background-position: center;
+  /* background-position: center; */
+  background-attachment: fixed;
   background-repeat: no-repeat;
   min-height: 100vh;
 }
