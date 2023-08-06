@@ -73,112 +73,125 @@ function App() {
   console.log(state);
 
   return (
-    <div>
-      <Container
-        centerContent
-        maxW="container.sm"
-        bg="whiteAlpha.800"
-        color="gray.900"
-        rounded="lg"
-        dropShadow="lg"
-        paddingY="1rem"
-      >
-        <div className="header-box">
-          <h1>Granblue Fantasy Spark Calculator</h1>
-        </div>
-        <Divider borderColor="gray.400" />
+    <div className="container">
+      <div className="background-image" />
+      <div className="content-container">
         <Container
+          centerContent
           maxW="container.sm"
-          paddingX={paddingXForm}
-          paddingTop={"2rem"}
-          paddingBottom={"1rem"}
-          fontSize={"lg"}
-        >
-          <div className="input-wrapper">
-            <div>
-              <div className="input-label">Times already</div>
-              <div className="input-label">pulled</div>
-            </div>
-            <NumberInput min={0} size="lg" maxW={32} onChange={handleCerulean}>
-              <NumberInputField
-                borderColor="transparent"
-                background={"whiteAlpha.800"}
-              />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </div>
-          <div className="input-wrapper">
-            Crystals
-            <NumberInput min={0} size="lg" maxW={32} onChange={handleCrystals}>
-              <NumberInputField
-                borderColor="transparent"
-                background={"whiteAlpha.800"}
-              />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </div>
-          <div className="input-wrapper">
-            Single Tickets
-            <NumberInput
-              min={0}
-              size="lg"
-              maxW={32}
-              onChange={handleSingleTicket}
-            >
-              <NumberInputField
-                borderColor="transparent"
-                background={"whiteAlpha.800"}
-              />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </div>
-          <div className="input-wrapper">
-            x10 tickets
-            <NumberInput
-              min={0}
-              size="lg"
-              maxW={32}
-              onChange={handleTenTickets}
-            >
-              <NumberInputField
-                borderColor="transparent"
-                background={"whiteAlpha.800"}
-              />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </div>
-        </Container>
-        <Box
-          bg={resultColor}
-          width={"full"}
-          //minW="container.sm"
-          color="whiteAlpha.900"
+          bg="whiteAlpha.800"
+          color="gray.900"
           rounded="lg"
-          padding={isMobile ? "0" : "2rem"}
+          dropShadow="lg"
+          paddingY="1rem"
         >
-          {showWaiting && (
-            <ResultBox resultType="Waiting" numberOfPulls={numberOfPulls} />
-          )}
-          {showSuccess && (
-            <ResultBox resultType="Success" numberOfPulls={numberOfPulls} />
-          )}
-          {showFailure && (
-            <ResultBox resultType="Failure" numberOfPulls={numberOfPulls} />
-          )}
-        </Box>
-      </Container>
+          <div className="header-box">
+            <h1>Granblue Fantasy Spark Calculator</h1>
+          </div>
+          <Divider borderColor="gray.400" />
+          <Container
+            maxW="container.sm"
+            paddingX={paddingXForm}
+            paddingTop={"2rem"}
+            paddingBottom={"1rem"}
+            fontSize={"lg"}
+          >
+            <div className="input-wrapper">
+              <div>
+                <div className="input-label">Times already</div>
+                <div className="input-label">pulled</div>
+              </div>
+              <NumberInput
+                min={0}
+                size="lg"
+                maxW={32}
+                onChange={handleCerulean}
+              >
+                <NumberInputField
+                  borderColor="transparent"
+                  background={"whiteAlpha.800"}
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </div>
+            <div className="input-wrapper">
+              Crystals
+              <NumberInput
+                min={0}
+                size="lg"
+                maxW={32}
+                onChange={handleCrystals}
+              >
+                <NumberInputField
+                  borderColor="transparent"
+                  background={"whiteAlpha.800"}
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </div>
+            <div className="input-wrapper">
+              Single Tickets
+              <NumberInput
+                min={0}
+                size="lg"
+                maxW={32}
+                onChange={handleSingleTicket}
+              >
+                <NumberInputField
+                  borderColor="transparent"
+                  background={"whiteAlpha.800"}
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </div>
+            <div className="input-wrapper">
+              x10 tickets
+              <NumberInput
+                min={0}
+                size="lg"
+                maxW={32}
+                onChange={handleTenTickets}
+              >
+                <NumberInputField
+                  borderColor="transparent"
+                  background={"whiteAlpha.800"}
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </div>
+          </Container>
+          <Box
+            bg={resultColor}
+            width={"full"}
+            //minW="container.sm"
+            color="whiteAlpha.900"
+            rounded="lg"
+            padding={isMobile ? "0" : "2rem"}
+          >
+            {showWaiting && (
+              <ResultBox resultType="Waiting" numberOfPulls={numberOfPulls} />
+            )}
+            {showSuccess && (
+              <ResultBox resultType="Success" numberOfPulls={numberOfPulls} />
+            )}
+            {showFailure && (
+              <ResultBox resultType="Failure" numberOfPulls={numberOfPulls} />
+            )}
+          </Box>
+        </Container>
+      </div>
     </div>
   );
 }
