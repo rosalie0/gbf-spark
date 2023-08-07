@@ -11,12 +11,11 @@ import {
   Divider,
   useMediaQuery,
   Box,
-  Image,
 } from "@chakra-ui/react";
 
 import ResultBox from "./ResultBox";
 
-const intialState: SparkCalculcatorForm = {
+const initialState: SparkCalculcatorForm = {
   cerulean: undefined,
   crystals: undefined,
   singleTickets: undefined,
@@ -27,12 +26,26 @@ function App() {
   const [isMobile] = useMediaQuery("(max-width: 767px)");
   const paddingXForm = isMobile ? "0" : "6rem";
 
-  const [state, setState] = useState(intialState);
+  const [state, setState] = useState(initialState);
   const [isTouched, setIsTouched] = useState(false);
   const [isFilledOut, setIsFilledOut] = useState(false);
 
   useEffect(() => {
+    const localStorageContent = localStorage.getItem("formContent");
+    if (localStorageContent && localStorageContent !== "{}") {
+      console.log("found values in ls");
+      console.log({ localStorageContent });
+      const parsed = JSON.parse(localStorageContent);
+      console.log(parsed);
+      setState(parsed);
+    }
+  }, []);
+
+  console.log(state);
+
+  useEffect(() => {
     const formValues = Object.values(state);
+    localStorage.setItem("formContent", JSON.stringify(state));
     setIsTouched(formValues.some((ele) => ele !== undefined));
     // if any of its values are not undefined, its touched.
   }, [state]);
@@ -57,7 +70,6 @@ function App() {
   };
 
   const numberOfPulls = calculateNumberOfPulls(state);
-  console.log(numberOfPulls);
   const canSpark = numberOfPulls >= 300;
 
   const showWaiting = !isTouched;
@@ -70,7 +82,6 @@ function App() {
 
   // if (isFilledOut && canSpark) resultColor = "green.300";
   // if (isFilledOut && !canSpark) resultColor = "red.300";
-  console.log(state);
 
   return (
     <div className="container">
@@ -86,7 +97,8 @@ function App() {
           paddingY="1rem"
         >
           <div className="header-box">
-            <h1>Granblue Fantasy Spark Calculator</h1>
+            <h1>Granblue Fantasy</h1>
+            <h1>Spark Calculator</h1>
           </div>
           <Divider borderColor="gray.400" />
           <Container
@@ -102,6 +114,7 @@ function App() {
                 <div className="input-label">pulled</div>
               </div>
               <NumberInput
+                value={state.cerulean}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -117,9 +130,11 @@ function App() {
                 </NumberInputStepper>
               </NumberInput>
             </div>
+
             <div className="input-wrapper">
               Crystals
               <NumberInput
+                value={state?.crystals}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -138,6 +153,7 @@ function App() {
             <div className="input-wrapper">
               Single Tickets
               <NumberInput
+                value={state?.singleTickets}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -156,6 +172,7 @@ function App() {
             <div className="input-wrapper">
               x10 tickets
               <NumberInput
+                value={state.tenTickets}
                 min={0}
                 size="lg"
                 maxW={32}
