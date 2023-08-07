@@ -34,10 +34,9 @@ function App() {
     const localStorageContent = localStorage.getItem("formContent");
     if (localStorageContent && localStorageContent !== "{}") {
       const parsed = JSON.parse(localStorageContent);
-\      setState(parsed);
+      setState(parsed);
     }
   }, []);
-
 
   useEffect(() => {
     const formValues = Object.values(state);
