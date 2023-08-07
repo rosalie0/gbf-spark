@@ -28,20 +28,16 @@ function App() {
 
   const [state, setState] = useState(initialState);
   const [isTouched, setIsTouched] = useState(false);
-  const [isFilledOut, setIsFilledOut] = useState(false);
+  //const [isFilledOut, setIsFilledOut] = useState(false);
 
   useEffect(() => {
     const localStorageContent = localStorage.getItem("formContent");
     if (localStorageContent && localStorageContent !== "{}") {
-      console.log("found values in ls");
-      console.log({ localStorageContent });
       const parsed = JSON.parse(localStorageContent);
-      console.log(parsed);
-      setState(parsed);
+\      setState(parsed);
     }
   }, []);
 
-  console.log(state);
 
   useEffect(() => {
     const formValues = Object.values(state);
@@ -50,11 +46,11 @@ function App() {
     // if any of its values are not undefined, its touched.
   }, [state]);
 
-  useEffect(() => {
-    const formValues = Object.values(state);
-    setIsFilledOut(!formValues.some((ele) => ele === undefined));
-    // if any of its values are not undefined, its touched.
-  }, [state]);
+  // useEffect(() => {
+  //   const formValues = Object.values(state);
+  //   setIsFilledOut(!formValues.some((ele) => ele === undefined));
+  //   // if any of its values are not undefined, its touched.
+  // }, [state]);
 
   const handleCerulean = (value: string) => {
     setState({ ...state, cerulean: Number(value) });
