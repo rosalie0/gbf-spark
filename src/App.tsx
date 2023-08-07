@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { SparkCalculcatorForm, calculateNumberOfPulls } from "../util/";
 import {
@@ -11,6 +11,7 @@ import {
   Divider,
   useMediaQuery,
   Box,
+  Button,
 } from "@chakra-ui/react";
 
 import ResultBox from "./ResultBox";
@@ -25,7 +26,6 @@ const initialState: SparkCalculcatorForm = {
 function App() {
   const [isMobile] = useMediaQuery("(max-width: 767px)");
   const paddingXForm = isMobile ? "0" : "6rem";
-
   const [state, setState] = useState(initialState);
   const [isTouched, setIsTouched] = useState(false);
   //const [isFilledOut, setIsFilledOut] = useState(false);
@@ -39,10 +39,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const formValues = Object.values(state);
+    // Update local storage
     localStorage.setItem("formContent", JSON.stringify(state));
+
+    // Update isTouched:
+    // if any of the form's values are not undefined, its touched.
+    const formValues = Object.values(state);
     setIsTouched(formValues.some((ele) => ele !== undefined));
-    // if any of its values are not undefined, its touched.
   }, [state]);
 
   // useEffect(() => {
@@ -61,7 +64,18 @@ function App() {
     setState({ ...state, singleTickets: Number(value) });
   };
   const handleTenTickets = (value: string) => {
+    console.log({ value });
     setState({ ...state, tenTickets: Number(value) });
+  };
+
+  const clearButtonHandler = () => {
+    localStorage.removeItem("formContent");
+    setState({
+      cerulean: undefined,
+      crystals: undefined,
+      singleTickets: undefined,
+      tenTickets: undefined,
+    });
   };
 
   const numberOfPulls = calculateNumberOfPulls(state);
@@ -74,9 +88,6 @@ function App() {
   let resultColor = "orange.300";
   if (showSuccess) resultColor = "green.300";
   if (showFailure) resultColor = "red.300";
-
-  // if (isFilledOut && canSpark) resultColor = "green.300";
-  // if (isFilledOut && !canSpark) resultColor = "red.300";
 
   return (
     <div className="container">
@@ -109,7 +120,7 @@ function App() {
                 <div className="input-label">pulled</div>
               </div>
               <NumberInput
-                value={state.cerulean}
+                value={state.cerulean || ""}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -129,7 +140,7 @@ function App() {
             <div className="input-wrapper">
               Crystals
               <NumberInput
-                value={state?.crystals}
+                value={state?.crystals || ""}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -148,7 +159,7 @@ function App() {
             <div className="input-wrapper">
               Single Tickets
               <NumberInput
-                value={state?.singleTickets}
+                value={state?.singleTickets || ""}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -167,7 +178,7 @@ function App() {
             <div className="input-wrapper">
               x10 tickets
               <NumberInput
-                value={state.tenTickets}
+                value={state.tenTickets || ""}
                 min={0}
                 size="lg"
                 maxW={32}
@@ -187,7 +198,6 @@ function App() {
           <Box
             bg={resultColor}
             width={"full"}
-            //minW="container.sm"
             color="whiteAlpha.900"
             rounded="lg"
             padding={isMobile ? "0" : "2rem"}
@@ -202,6 +212,13 @@ function App() {
               <ResultBox resultType="Failure" numberOfPulls={numberOfPulls} />
             )}
           </Box>
+          <Button
+            colorScheme="red"
+            marginY={"1rem"}
+            onClick={clearButtonHandler}
+          >
+            Clear
+          </Button>
         </Container>
       </div>
     </div>
